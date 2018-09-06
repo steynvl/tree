@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 
-void new_dir(char *name, int level);
+void print_dir(char *name, int level);
 
 void print_files(char **files, size_t num_of_files, int level);
 
