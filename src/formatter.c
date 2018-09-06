@@ -22,10 +22,14 @@ void new_dir(char *name, int level)
     printf("%s\n", name);
 }
 
-void print_file(char *name, int level)
+void print_files(char **files, size_t num_of_files, int level)
 {
-    print_til_level(level, FALSE);
-    printf("%s\n", name);
+    size_t  i;
+
+    for (i = 0; i < num_of_files; i++) {
+        print_til_level(level, i == num_of_files - 1);
+        printf("%s\n", files[i]);
+    }
 }
 
 void print_report(int num_dirs, int num_files){
@@ -34,17 +38,20 @@ void print_report(int num_dirs, int num_files){
 
 static void print_til_level(int level, Boolean last)
 {
+    Boolean at_last_level;
     int i, depth;
 
     for (depth = 1; depth < level; depth++) {
-        if (depth == level - 1) {
+        at_last_level = depth == level - 1;
+
+        if (at_last_level) {
             printf("%lc", last ? DOWN_RIGHT : DOWN_RIGHT_DOWN);
         } else {
             printf("%lc", VERTICAL_LINE);
         }
 
         for (i = 1; i <= LEVEL_WIDTH; i++) {
-            if (depth == level - 1) {
+            if (at_last_level) {
                 printf("%lc", HORIZONTAL_LINE);
             } else {
                 printf(" ");

@@ -6,6 +6,7 @@
 #include <locale.h>
 #include "formatter.h"
 
+#define MAX_INITIAL_DIR_SIZE 10
 
 void list_dirs(char *path, int level);
 char* build_path(const char *p1, const char *p2);
@@ -40,6 +41,8 @@ void list_dirs(char *path, int level)
     struct dirent *dir_entry;
     DIR *dir;
     char *full_path;
+    char **files_in_dir;
+    size_t i, j, nfiles = MAX_INITIAL_DIR_SIZE;
 
     dir = opendir(path);
 
@@ -52,8 +55,10 @@ void list_dirs(char *path, int level)
         }
     }
 
-    new_dir(path, level);
+    i = 0;
+    files_in_dir = malloc(sizeof(char *) * nfiles);
 
+    new_dir(path, level);
     while ((dir_entry = readdir(dir)) != NULL) {
         if ((strcmp(dir_entry->d_name, ".") == 0) || (strcmp(dir_entry->d_name, "..") == 0)) {
             continue;
@@ -63,13 +68,27 @@ void list_dirs(char *path, int level)
         if (is_directory(full_path)) {
             num_directories++;
             list_dirs(full_path, level + 1);
+            free(full_path);
         } else {
-            print_file(full_path, level + 1);
+            if (i == nfiles - 1) {
+                nfiles *= 2;
+                if ((files_in_dir = realloc(files_in_dir, nfiles)) == NULL) {
+                    fprintf(stderr, "Realloc of %zu bytes failed", nfiles);
+                    exit(EXIT_FAILURE);
+                }
+            }
+
+            files_in_dir[i++] = full_path;
             num_files++;
         }
-
-        free(full_path);
     }
+
+    print_files(files_in_dir, i, level + 1);
+
+    for (j = 0; j < i; j++) {
+        free(files_in_dir[j]);
+    }
+    free(files_in_dir);
 
     closedir(dir);
 }
