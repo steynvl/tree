@@ -3,4 +3,4 @@ project(tree C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(tree src/main.c)
+add_executable(tree src/main.c src/formatter.c src/formatter.h)
