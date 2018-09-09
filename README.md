@@ -25,7 +25,8 @@ $ tree --help
 
 ## Example
 ```bash
-$ tree ~/inferrer
+$ cd ~/inferrer
+$ tree
 .
 ├─── inferrer
 │   ├─── oracle
