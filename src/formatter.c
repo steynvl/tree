@@ -16,13 +16,13 @@ wchar_t VERTICAL_LINE   = 0x2502;
 wchar_t DOWN_RIGHT_DOWN = 0x251c;
 wchar_t DOWN_RIGHT      = 0x2514;
 
-#define ESC              "\033["
-#define BOLD             "1;"
-#define ASCII_RESET      ESC "m"
-#define BLUE             "34m"
-#define ASCII_BOLD_BLUE  ESC BOLD BLUE
+#define ESC               "\033["
+#define BOLD              "1;"
+#define ASCII_RESET       ESC "m"
+#define BLUE              "34m"
+#define ASCII_BOLD_BLUE   ESC BOLD BLUE
 
-#define LEVEL_WIDTH (3)
+#define LEVEL_WIDTH       (3)
 
 /* --- function prototypes -------------------------------------------------- */
 static void print_til_level(int level, Boolean last);
