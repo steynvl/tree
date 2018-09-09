@@ -1,26 +1,38 @@
+/**
+ * @file tree.c
+ *
+ * A recursive directory listing program that produces a depth indented
+ * listing of files.
+ *
+ * @author  Steyn van Litsenborgh
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <dirent.h>
 #include <sys/stat.h>
 #include <string.h>
 #include <locale.h>
+#include "boolean.h"
 #include "formatter.h"
 
-#define MAX_INITIAL_DIR_SIZE 1024
+/* --- global variables ----------------------------------------------------- */
+int num_directories; /* counts the number of directories we visit */
+int num_files;       /* counts the number of files we visit */
 
+#define MAX_INITIAL_DIR_SIZE (1024)
+
+/* --- function prototypes -------------------------------------------------- */
 void list_dirs(char *path, int level);
 char* build_path(const char *p1, const char *p2);
-int is_directory(const char *path);
-
-int num_directories;
-int num_files;
+Boolean is_directory(const char *path);
 
 int main(int argc, char *argv[])
 {
     char *base;
 
     if (argc == 2 && (strcmp(argv[1], "--help") == 0)) {
-        /* TODO */
+        printf("Usage: tree [directory]\n");
         exit(EXIT_SUCCESS);
     }
 
@@ -46,7 +58,7 @@ void list_dirs(char *path, int level)
     dir = opendir(path);
 
     if (dir == NULL) {
-        if (level == 0) {
+        if (level == 1) {
             fprintf(stderr, "Could not open directory '%s'\n", path);
             exit(EXIT_FAILURE);
         } else {
@@ -59,7 +71,6 @@ void list_dirs(char *path, int level)
 
     print_dir(path, level);
     while ((dir_entry = readdir(dir)) != NULL) {
-
         if ((strcmp(dir_entry->d_name, ".") == 0) || (strcmp(dir_entry->d_name, "..") == 0)) {
             continue;
         }
@@ -90,7 +101,7 @@ void list_dirs(char *path, int level)
     closedir(dir);
 }
 
-int is_directory(const char *path)
+Boolean is_directory(const char *path)
 {
     struct stat ps;
     stat(path, &ps);
