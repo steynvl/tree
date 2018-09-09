@@ -32,6 +32,7 @@ void print_dir(char *name, int level)
 {
     if (level > 1) {
         print_til_level(level, FALSE);
+        printf(" ");
     }
 
     printf("%s%s%s\n", ASCII_BOLD_BLUE, extract_dir_name(name), ASCII_RESET);
@@ -60,14 +61,18 @@ static void print_til_level(int level, Boolean last)
     for (depth = 1; depth < level; depth++) {
         at_last_level = depth == level - 1;
 
+        if (depth > 1) {
+            printf(" ");
+        }
+
         at_last_level ? printf("%lc", last ? DOWN_RIGHT : DOWN_RIGHT_DOWN)
                       : printf("%lc", VERTICAL_LINE);
 
         for (i = 1; i <= LEVEL_WIDTH; i++) {
             at_last_level ? printf("%lc", HORIZONTAL_LINE) : printf(" ");
         }
+
     }
-    printf(" ");
 }
 
 static char* extract_dir_name(char *full_path)
